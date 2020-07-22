@@ -8,6 +8,10 @@ aliases:
     working_directory: ~/repo
     docker:
       - image: circleci/ruby:2-node-browsers
+  - &nodejs
+    working_directory: ~/repo/nodejs-wdio
+    docker:
+      - image: circleci/ruby:2-node-browsers
 
 jobs:
   prepare:
@@ -27,8 +31,7 @@ jobs:
             - .
 
   npm-install:
-    <<: *defaults
-    working_directory: ~/repo/nodejs-wdio
+    <<: *nodejs
     steps:
       - attach_workspace:
           at: ~/repo
@@ -60,7 +63,7 @@ jobs:
             echo ${CONTAINER_IMAGE} > container-image
 
   npm-test:
-    <<: *defaults
+    <<: *nodejs
     working_directory: ~/repo/nodejs-wdio
     steps:
       - attach_workspace:
