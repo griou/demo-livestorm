@@ -28,10 +28,11 @@ jobs:
 
   npm-install:
     <<: *defaults
+    working_directory: ~/repo/nodejs-wdio
     steps:
       - attach_workspace:
           at: ~/repo
-      - working_directory: nodejs-wdio
+
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package-lock.json" }}
