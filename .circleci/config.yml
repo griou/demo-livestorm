@@ -26,6 +26,8 @@ jobs:
   npm-install:
     <<: *defaults
     steps:
+      - run: pwd
+      - run: ls -al
       - run: cd nodejs-wdio
       - restore_cache:
           keys:
