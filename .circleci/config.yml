@@ -61,10 +61,10 @@ jobs:
 
   npm-test:
     <<: *defaults
+    working_directory: ~/repo/nodejs-wdio
     steps:
       - attach_workspace:
           at: ~/repo
-      # - working_directory: ~/repo/nodejs-wdio
       - run: pwd
       - run: ls -al .
       - run: ls -al ..
