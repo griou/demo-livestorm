@@ -8,12 +8,7 @@ aliases:
     working_directory: ~/repo
     docker:
       - image: circleci/ruby:2-node-browsers
-  - &npm
-    working_directory: ~/repo
-    docker:
-      - image: circleci/ruby:2-node-browsers
-    steps:
-      - run: cd nodejs-wdio
+
 jobs:
   prepare:
     <<: *defaults
@@ -29,8 +24,9 @@ jobs:
             - .
 
   npm-install:
-    <<: *npm
+    <<: *defaults
     steps:
+      - run: cd nodejs-wdio
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package-lock.json" }}
@@ -58,8 +54,9 @@ jobs:
             echo ${CONTAINER_IMAGE} > container-image
 
   npm-test:
-    <<: *npm
+    <<: *defaults
     steps:
+      - run: cd nodejs-wdio
       - attach_workspace:
           at: ~/repo
       - run:
