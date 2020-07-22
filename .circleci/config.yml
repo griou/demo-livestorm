@@ -18,9 +18,7 @@ jobs:
           at: ~/repo
       - run:
           name: Download Selenium
-          command: '[ -f "selenium-server-standalone-3.5.3.jar" ] && curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar || echo 0'
-      - run: mkdir selenium-logs
-      - run: pwd
+          command: '[ ! -f "selenium-server-standalone-3.5.3.jar" ] && curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar || echo 0'
       - run: ls -al
       - persist_to_workspace:
           root: ~/repo
