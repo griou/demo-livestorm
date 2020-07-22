@@ -31,17 +31,17 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: cd nodejs-wdio
+      - working_directory: nodejs-wdio
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "nodejs-wdio/package-lock.json" }}
+            - v1-dependencies-{{ checksum "package-lock.json" }}
             - v1-dependencies-
       - run:
           name: Install Dependencies
           command: |
             npm install
       - save_cache:
-          key: v1-dependencies-{{ checksum "nodejs-wdio/package-lock.json" }}
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
       - persist_to_workspace:
@@ -63,13 +63,13 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: cd nodejs-wdio
+      - working_directory: nodejs-wdio
       - run: pwd
       - run: ls -al .
       - run: ls -al ..
       - run:
           name: Start Selenium
-          command: java -jar ./selenium-server-standalone-3.5.3.jar -log selenium-logs/selenium.log
+          command: java -jar ../selenium-server-standalone-3.5.3.jar -log selenium-logs/selenium.log
           background: true
       - run:
           name: run desktop test
