@@ -14,6 +14,8 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/repo
       - run:
           name: Download Selenium
           command: '[ -f "selenium-server-standalone-3.5.3.jar" ] && curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar || echo 0'
@@ -28,6 +30,8 @@ jobs:
   npm-install:
     <<: *defaults
     steps:
+      - attach_workspace:
+          at: ~/repo
       - run: pwd
       - run: ls -al
       - run: cd nodejs-wdio
@@ -60,9 +64,9 @@ jobs:
   npm-test:
     <<: *defaults
     steps:
-      - run: cd nodejs-wdio
       - attach_workspace:
           at: ~/repo
+      - run: cd nodejs-wdio
       - run:
           name: Start Selenium
           command: java -jar ../selenium-server-standalone-3.5.3.jar -log selenium-logs/selenium.log
