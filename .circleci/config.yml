@@ -1,0 +1,145 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+# Use a package of configuration called an orb.
+
+# Orchestrate or schedule a set of jobs
+aliases:
+  - &defaults
+    working_directory: ~/repo
+    docker:
+      - image: circleci/ruby:2-node-browsers
+  - &npm
+    working_directory: ~/repo
+    docker:
+      - image: circleci/ruby:2-node-browsers
+    steps:
+      - run: cd nodejs-wdio
+jobs:
+  prepare:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Download Selenium
+          command: '[ -f "selenium-server-standalone-3.5.3.jar" ] && curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar || echo 0'
+      - run: mkdir selenium-logs
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - .
+
+  npm-install:
+    <<: *npm
+    steps:
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package-lock.json" }}
+            - v1-dependencies-
+      - run:
+          name: Install Dependencies
+          command: |
+            npm install
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - .
+
+  bundle-install:
+    <<: *defaults
+    steps:
+      - run:
+          name: Setup custom environment variables
+          command: |
+            CONTAINER_IMAGE="${REGISTRY_HOST}/li_web/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1}"
+            echo ${CONTAINER_IMAGE} > container-image
+
+  npm-test:
+    <<: *npm
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Start Selenium
+          command: java -jar selenium-server-standalone-3.5.3.jar -log selenium-logs/selenium.log
+          background: true
+      - run:
+          name: run desktop test
+          command: npm run ci:desktop
+          background: true
+      - run:
+          name: run mobile test
+          command: npm run ci:mobile
+          when: always
+      - run:
+          name: Make history dir for allure
+          command: mkdir allure-results/history
+          when: always
+
+      - run:
+          name: Get previous artifact links
+          command: curl -G --data-urlencode "branch=$CIRCLE_BRANCH" "https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/latest/artifacts?circle-token=$CIRCLE_TOKEN&filter=completed" | grep -o 'https\:\/\/.*history\/history.*\.json' > artifacts.txt || true
+          when: always
+
+      - run:
+          name: Download history artfacts
+          command: <artifacts.txt xargs -P4 -I % wget %?circle-token=$CIRCLE_TOKEN
+          when: always
+      - run:
+          name: Rename and copy history artifacts to allure-result
+          command: |
+            mv history.json?circle-token=$CIRCLE_TOKEN history.json && mv history-trend.json?circle-token=$CIRCLE_TOKEN history-trend.json || true
+            cp history.json allure-results/history/ && cp history-trend.json allure-results/history/ || true
+            mv categories-trend.json?circle-token=$CIRCLE_TOKEN categories-trend.json && mv duration-trend.json?circle-token=$CIRCLE_TOKEN duration-trend.json || true
+            cp categories-trend.json allure-results/history/ && cp duration-trend.json allure-results/history/ || true
+            mv retry-trend.json?circle-token=$CIRCLE_TOKEN retry-trend.json || true
+            cp retry-trend.json allure-results/history/ || true
+          when: always
+
+      # create allure report
+      - run:
+          name: generate allure report
+          command: npm run report:make
+          when: always
+
+      - store_test_results:
+          path: ./junit-report/
+
+      - store_artifacts:
+          path: ./junit-report/
+
+      - store_artifacts:
+          path: ./allure-report/
+
+      - store_artifacts:
+          path: ./selenium-logs/
+
+  bundle-test:
+    <<: *defaults
+    steps:
+      - run:
+          name: Setup custom environment variables
+          command: |
+            CONTAINER_IMAGE="${REGISTRY_HOST}/li_web/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1}"
+            echo ${CONTAINER_IMAGE} > container-image
+
+workflows:
+  version: 2
+  e2e:
+    jobs:
+      - prepare
+      - npm-install:
+          requires:
+            - prepare
+      # - bundle-install:
+      #     requires:
+      #       - prepare
+      - npm-test:
+          requires:
+            - npm-install
+      # - bundle-test:
+      #     requires:
+      #       - npm-test
