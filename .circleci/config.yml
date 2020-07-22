@@ -31,7 +31,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - working_directory: ~/repo/nodejs-wdio
+      # - working_directory: ~/repo/nodejs-wdio
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package-lock.json" }}
@@ -63,7 +63,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - working_directory: ~/repo/nodejs-wdio
+      # - working_directory: ~/repo/nodejs-wdio
       - run: pwd
       - run: ls -al .
       - run: ls -al ..
