@@ -61,7 +61,7 @@ jobs:
           at: ~/repo
       - run:
           name: Start Selenium
-          command: java -jar selenium-server-standalone-3.5.3.jar -log selenium-logs/selenium.log
+          command: java -jar ../selenium-server-standalone-3.5.3.jar -log selenium-logs/selenium.log
           background: true
       - run:
           name: run desktop test
