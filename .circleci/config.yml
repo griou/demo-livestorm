@@ -30,6 +30,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
+      - run: cd nodejs-wdio
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "nodejs-wdio/package-lock.json" }}
