@@ -16,11 +16,11 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/repo
-      - run: ls -al
+
       - run:
           name: Download Selenium
           command: '[ ! -f "selenium-server-standalone-3.5.3.jar" ] && curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar || echo 0'
-      - run: ls -al
+      - run: mdkir -p ./selenium-logs/
       - persist_to_workspace:
           root: ~/repo
           paths:
@@ -65,12 +65,9 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: pwd
-      - run: ls -al .
-      - run: ls -al ..
       - run:
           name: Start Selenium
-          command: java -jar ../selenium-server-standalone-3.5.3.jar -log selenium-logs/selenium.log
+          command: java -jar ../selenium-server-standalone-3.5.3.jar -log ../selenium-logs/selenium.log
           background: true
       - run:
           name: run desktop test
