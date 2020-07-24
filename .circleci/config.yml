@@ -80,10 +80,6 @@ jobs:
           command: npm run ci:mobile
           when: always
       - run:
-          name: Stop selenium
-          command: pkill java || true
-          when: always
-      - run:
           name: Make history dir for allure
           command: mkdir allure-results/history
           when: always
