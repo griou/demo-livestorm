@@ -122,7 +122,7 @@ jobs:
           command: |
             echo "nothing"
 orbs:
-  secrethub: secrethub/cli@0.40.0
+  secrethub: secrethub/cli@1.0.1
 
 workflows:
   version: 2
