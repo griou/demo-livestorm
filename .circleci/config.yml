@@ -81,7 +81,7 @@ jobs:
           when: always
       - run:
           name: Stop selenium
-          command: killall selenium
+          command: pkill selenium
           when: always
       - run:
           name: Make history dir for allure
