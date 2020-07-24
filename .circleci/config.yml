@@ -22,6 +22,7 @@ jobs:
           name: Download Selenium
           command: "curl -O http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar"
       - run: mkdir -p ./selenium-logs/
+      - run: secrethub read griou/livestorm/users > fixtures/users.fixture.json
       - persist_to_workspace:
           root: ~/repo
           paths:
@@ -120,7 +121,8 @@ jobs:
           name: Setup custom environment variables
           command: |
             echo "nothing"
-
+orbs:
+  secrethub: secrethub/cli@0.40.0
 workflows:
   version: 2
   e2e:
