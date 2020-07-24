@@ -123,6 +123,7 @@ jobs:
             echo "nothing"
 orbs:
   secrethub: secrethub/cli@0.40.0
+
 workflows:
   version: 2
   e2e:
