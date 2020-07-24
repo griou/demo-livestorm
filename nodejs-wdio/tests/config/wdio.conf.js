@@ -143,6 +143,7 @@ exports.config = {
         outputDir: "allure-results",
         disableWebdriverStepsReporting: true,
         disableWebdriverScreenshotsReporting: false,
+        disableMochaHooks: true,
       },
     ],
   ],
@@ -152,7 +153,7 @@ exports.config = {
   // See the full list at http://mochajs.org/
   mochaOpts: {
     ui: "bdd",
-    timeout: debug === true ? 1800000 : 10000,
+    timeout: debug === true ? 1800000 : 5000,
     require: "ts-node/register",
     compilers: [
       // optional
@@ -218,7 +219,12 @@ exports.config = {
   /**
    * Function to be executed before a test (in Mocha/Jasmine) starts.
    */
-  beforeTest: function (test, context) {
+  beforeTest: function (test, context) {},
+  /**
+   * Hook that gets executed _before_ a hook within the suite starts (e.g. runs before calling
+   * beforeEach in Mocha)
+   */
+  beforeHook: function (test, context) {
     const { addArgument } = require("@wdio/allure-reporter").default;
     addArgument("viewport", viewport);
     if (viewport == "mobile") {
@@ -227,12 +233,6 @@ exports.config = {
       browser.maximizeWindow();
     }
   },
-  /**
-   * Hook that gets executed _before_ a hook within the suite starts (e.g. runs before calling
-   * beforeEach in Mocha)
-   */
-  // beforeHook: function (test, context) {
-  // },
   /**
    * Hook that gets executed _after_ a hook within the suite starts (e.g. runs after calling
    * afterEach in Mocha)
@@ -250,12 +250,6 @@ exports.config = {
     if (error !== undefined) {
       browser.takeScreenshot();
     }
-    browser.executeAsync(function (done) {
-      window.localStorage && window.localStorage.clear
-        ? window.localStorage.clear()
-        : null;
-      done();
-    });
   },
 
   /**

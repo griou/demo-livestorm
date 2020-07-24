@@ -41,9 +41,7 @@ class SignInComponent extends Page {
     this.signIn(user);
     this.allureReporter.startStep("Get Fields Error Messages");
     browser.waitUntil(
-      () =>
-        this.fieldErrors[0].isDisplayed() === true ||
-        this.fieldErrors[1].isDisplayed() === true
+      () => this.fieldErrors.filter((e) => e.isDisplayed()).length > 0
     );
     const errorMessages = this.fieldErrors.map((e) => e.getText());
     this.allureReporter.endStep();

@@ -1,5 +1,7 @@
 import Page from "./page";
+import WebinarsPage from "./webinars.page";
 import SignInComponent from "./components/signInForm.comp";
+import isSignedIn from "../helpers/signIn.helper";
 import { User } from "../types/user";
 
 const SCREEN_SELECTOR = "h2.intro-title"; // Nice seeing you again
@@ -10,19 +12,17 @@ class SignInPage extends Page {
   }
 
   public visit(): void {
+    // TODO: refactor to make login dynamic
     super.visit("https://app.livestorm.co/#/login");
   }
 
-  public getTitle(): string {
-    return $(this.screen_selector).getText();
-  }
-
-  public signIn(user: User): void {
+  public signIn(user: User): typeof WebinarsPage {
     SignInComponent.signIn(user);
+    return WebinarsPage;
   }
 
-  public isSignedIn(): boolean {
-    return SignInComponent.isSignedIn();
+  public isSignedIn(signIn = true): boolean {
+    return isSignedIn(signIn);
   }
 
   public signInAndReturnFieldsError(user: User): Array<String> {

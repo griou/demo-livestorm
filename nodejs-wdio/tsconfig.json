@@ -1,7 +1,13 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "types": ["@wdio/sync", "node", "@types/node", "@types/mocha", "@types/chai"],
+    "types": [
+      "@wdio/sync",
+      "node",
+      "@types/node",
+      "@types/mocha",
+      "@types/chai"
+    ],
     "target": "es5",
     "noImplicitAny": false,
     "strict": true,
@@ -10,4 +16,4 @@
   },
   "include": ["tests/**/*.ts"],
   "exclude": ["node_modules"]
-} 
+}

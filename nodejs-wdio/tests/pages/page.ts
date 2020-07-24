@@ -1,15 +1,15 @@
 import allureReporter from "@wdio/allure-reporter";
 
 class Page {
-  protected screen_selector: string;
+  protected screenSelector: string;
   protected allureReporter = allureReporter;
 
   constructor(selector: string) {
-    this.screen_selector = selector;
+    this.screenSelector = selector;
   }
 
-  protected waitForDisplayed(): void {
-    browser.waitUntil(() => $(this.screen_selector).isDisplayed() === true);
+  public waitForDisplayed(): void {
+    browser.waitUntil(() => this.isDisplayed());
   }
 
   public visit(path: string): void {
@@ -17,6 +17,10 @@ class Page {
     browser.url(path);
     this.waitForDisplayed();
     this.allureReporter.endStep();
+  }
+
+  public isDisplayed(): boolean {
+    return $(this.screenSelector).isDisplayed();
   }
 }
 
