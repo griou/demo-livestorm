@@ -73,4 +73,4 @@ Exécution d'un serveur selenium dans le container docker :
 Exécution des tests avec browsers stacks :
 
 - [Reporting junit]()
-- [Reporting Allure]()
+- [Reporting Allure](https://64-281498399-gh.circle-artifacts.com/0/allure-report/index.html)

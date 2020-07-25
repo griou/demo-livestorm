@@ -2,5 +2,33 @@
   "validUser": {
     "userEmail": "tom@livestorm.co",
     "userPwd": "password"
+  },
+  "incorrectPassword": {
+    "userEmail": "tom@livestorm.co",
+    "userPwd": "password"
+  },
+  "emptyEmail": {
+    "userEmail": "",
+    "userPwd": "password"
+  },
+  "invalidEmail": {
+    "userEmail": "guillaume@livestorm",
+    "userPwd": "password"
+  },
+  "emptyPassword": {
+    "userEmail": "guillaume@livestorm.co",
+    "userPwd": ""
+  },
+  "tooShortPassword": {
+    "userEmail": "guillaume@livestorm.co",
+    "userPwd": "1234567"
+  },
+  "invalidFields": {
+    "userEmail": "guillaume@livestorm",
+    "userPwd": "1234567"
+  },
+  "unknownEmail": {
+    "userEmail": "aezfefzfze@livestorm.co",
+    "userPwd": "password"
   }
 }

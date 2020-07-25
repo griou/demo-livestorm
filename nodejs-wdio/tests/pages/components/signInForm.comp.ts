@@ -40,10 +40,15 @@ class SignInComponent extends Page {
   public signInAndReturnFieldsError(user: User): Array<String> {
     this.signIn(user);
     this.allureReporter.startStep("Get Fields Error Messages");
-    browser.waitUntil(
-      () => this.fieldErrors.filter((e) => e.isDisplayed()).length > 0
-    );
-    const errorMessages = this.fieldErrors.map((e) => e.getText());
+    browser.waitUntil(() => this.fieldErrors.some((e) => e.isDisplayed()));
+    var errorMessages = this.fieldErrors.reduce<string[]>(function (
+      filtered,
+      e
+    ) {
+      if (e.isDisplayed()) filtered.push(e.getText());
+      return filtered;
+    },
+    []);
     this.allureReporter.endStep();
     return errorMessages;
   }
