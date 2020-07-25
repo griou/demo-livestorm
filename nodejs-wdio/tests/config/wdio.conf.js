@@ -100,7 +100,7 @@ exports.config = {
   // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
   // gets prepended directly.
 
-  baseUrl: "https://www.livestorm.co",
+  baseUrl: "https://app.livestorm.co",
 
   //
   // Default timeout for all waitFor* commands.

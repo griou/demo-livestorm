@@ -11,14 +11,13 @@ describe("Sign Out Success", function () {
     // TO DO: refactor with a http post request
     SignInPage.visit();
     this.webinarsPage = SignInPage.signIn(this.users["validUser"]);
+    this.webinarsPage.signOut();
   });
   it("should destroy session", function () {
-    this.webinarsPage.signOut();
     expect(SignInPage.isSignedIn(false), "Session should be destroyed").to.be
       .false;
   });
   it("should redirect to sign in page", function () {
-    this.webinarsPage.signOut();
     expect(
       () => SignInPage.waitForDisplayed(),
       "Sign in page should be displayed"

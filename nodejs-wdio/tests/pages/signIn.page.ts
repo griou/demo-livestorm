@@ -13,7 +13,7 @@ class SignInPage extends Page {
 
   public visit(): void {
     // TODO: refactor to make login dynamic
-    super.visit("https://app.livestorm.co/#/login");
+    super.visit("/#/login");
   }
 
   public signIn(user: User): typeof WebinarsPage {
