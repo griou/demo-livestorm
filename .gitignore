@@ -4,3 +4,5 @@
 selenoid/logs
 selenoid/video
 **/browserstack.config.yml
+**/junit-report
+**/local.log

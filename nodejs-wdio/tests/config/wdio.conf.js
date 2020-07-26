@@ -104,7 +104,7 @@ exports.config = {
 
   //
   // Default timeout for all waitFor* commands.
-  waitforTimeout: debug === true ? 120000 : 5000,
+  waitforTimeout: debug === true ? 120000 : 15000,
   //
   // Default timeout in milliseconds for request
   // if browser driver or grid doesn't send response
@@ -153,7 +153,7 @@ exports.config = {
   // See the full list at http://mochajs.org/
   mochaOpts: {
     ui: "bdd",
-    timeout: debug === true ? 1800000 : 5000,
+    timeout: debug === true ? 1800000 : 15000,
     require: "ts-node/register",
     compilers: [
       // optional
