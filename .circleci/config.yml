@@ -36,7 +36,7 @@ jobs:
           paths:
             - .
 
-  bundle-install:
+  ruby-capybara:
     <<: *ruby
     steps:
       - attach_workspace:
@@ -48,22 +48,6 @@ jobs:
             - gem-cache-v1
       - run: bundle install
       - run: npm install -D allure-commandline
-      - save_cache:
-          key: gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-          paths:
-            - ~/repo/ruby-capybara
-      - persist_to_workspace:
-          root: ~/repo
-          paths:
-            - .
-
-  bundle-test:
-    <<: *ruby
-    steps:
-      - attach_workspace:
-          at: ~/repo
-      - run: pwd
-      - run: gem list
       - run:
           name: Test with chromedriver
           command: rake e2e:ci_chrome
@@ -74,8 +58,16 @@ jobs:
           when: always
       - store_artifacts:
           path: ./allure-report/
+      - save_cache:
+          key: gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          paths:
+            - ~/repo/ruby-capybara
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - .     
 
-  npm-install:
+  nodejs-wdio:
     <<: *nodejs
     steps:
       - attach_workspace:
@@ -88,20 +80,6 @@ jobs:
           name: Install Dependencies
           command: |
             npm install
-      - save_cache:
-          key: v1-dependencies-{{ checksum "package-lock.json" }}
-          paths:
-            - node_modules
-      - persist_to_workspace:
-          root: ~/repo
-          paths:
-            - .
-
-  npm-test:
-    <<: *nodejs
-    steps:
-      - attach_workspace:
-          at: ~/repo
       - run:
           name: Start Selenium
           command: java -jar ../selenium-server-standalone-3.5.3.jar -log ../selenium-logs/selenium-node.log
@@ -151,6 +129,14 @@ jobs:
           path: ./allure-report/
       - store_artifacts:
           path: ./selenium-logs/
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - .
   
 orbs:
   secrethub: secrethub/cli@1.0.1
@@ -160,15 +146,9 @@ workflows:
   e2e:
     jobs:
       - prepare
-      - npm-install:
+      - ruby-capybara:
           requires:
             - prepare
-      - bundle-install:
+      - nodejs-wdio:
           requires:
-            - prepare
-      - bundle-test:
-          requires:
-            - bundle-install
-      - npm-test:
-          requires:
-            - bundle-test
+            - nodejs-wdio
