@@ -62,7 +62,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: bundle exec rake chrome
+      - run: bundle exec rake e2e:ci_chrome
       - store_artifacts:
           path: ./allure-report/
 
@@ -156,9 +156,9 @@ workflows:
       - bundle-install:
           requires:
             - prepare
-      - bundle-install:
+      - bundle-test:
           requires:
-            - prepare
+            - bundle-install
       - npm-test:
           requires:
             - bundle-test
