@@ -64,8 +64,14 @@ jobs:
           at: ~/repo
       - run: pwd
       - run: gem list
-      - run: rake e2e:ci_chrome
-      - run: rake e2e:ci_browserstack
+      - run:
+          name: Test with chromedriver
+          command: rake e2e:ci_chrome
+          when: always
+      - run: 
+          name: Test with browserstack
+          command: rake e2e:ci_browserstack
+          when: always
       - store_artifacts:
           path: ./allure-report/
 
