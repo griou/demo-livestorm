@@ -4,10 +4,10 @@ const merge = require("deepmerge");
 exports.config = merge(
   wdioConf.config,
   {
-    hostname: "localhost",
-    port: 4444,
-    path: "/wd/hub",
-    maxInstances: 3,
+    // hostname: "localhost",
+    // port: 4444,
+    // path: "/wd/hub",
+    // maxInstances: 3,
   },
   { clone: false }
 );

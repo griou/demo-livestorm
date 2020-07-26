@@ -3,7 +3,7 @@ import WebinarsPage from "../pages/webinars.page";
 import { expect } from "chai";
 const fs = require("fs");
 
-describe("Sign In Fields Errors", function () {
+describe("Sign In Failures", function () {
   before(function () {
     const file = fs.readFileSync("../fixtures/users.fixture.json");
     this.users = JSON.parse(file);
@@ -24,6 +24,17 @@ describe("Sign In Fields Errors", function () {
       () => SignInPage.waitForDisplayed(),
       "Sign in page should be displayed"
     ).to.not.throw();
+  });
+});
+
+describe("Sign In Fields Errors", function () {
+  before(function () {
+    const file = fs.readFileSync("../fixtures/users.fixture.json");
+    this.users = JSON.parse(file);
+    SignInPage.visit();
+  });
+  afterEach(function () {
+    browser.refresh();
   });
 
   it("empty email should return an error", function () {
