@@ -20,20 +20,20 @@ POC de tests d'acceptation UI avec Capybara et WebdriverIo.
 Liste des tests d'acceptation UI (Rspec et Mocha) :
 
 * :arrow_down_small: **Sign in Failures**
-  * :white_check_mark:should not be signed in with incorrect password
-  * :white_check_mark:should redirect to login page in case of sign in failure on server side
+  * :white_check_mark: should not be signed in with incorrect password
+  * :white_check_mark: should redirect to login page in case of sign in failure on server side
 * :arrow_down_small:**Sign in Field Errors**
-  * :white_check_mark:each invalid field should return an error
-  * :white_check_mark:email with invalid format should return an error
-  * :white_check_mark:empty email should return an error
-  * :white_check_mark:empty password should return an error
-  * :white_check_mark:password too short should return an error
+  * :white_check_mark: each invalid field should return an error
+  * :white_check_mark: email with invalid format should return an error
+  * :white_check_mark: empty email should return an error
+  * :white_check_mark: empty password should return an error
+  * :white_check_mark: password too short should return an error
 * :arrow_down_small:**Sign in Form Errors**
-  * :white_check_mark:unknown email should return an error
-  * :white_check_mark:incorrect password should return an error
+  * :white_check_mark: unknown email should return an error
+  * :white_check_mark: incorrect password should return an error
 * :arrow_down_small:**Sign in Success**
-  * :white_check_mark:should be signed in
-  * :white_check_mark:should redirect to Webinars page
+  * :white_check_mark: should be signed in
+  * :white_check_mark: should redirect to Webinars page
 * :arrow_down_small:**Sign Out Success**
   * :white_check_mark: should destroy session
   * :white_check_mark: should redirect to sign in page
