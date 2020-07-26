@@ -90,10 +90,6 @@ jobs:
           command: npm run ci:desktop
           when: always
       - run:
-          name: run mobile test
-          command: npm run ci:mobile
-          when: always
-      - run:
           name: run test with browserstack
           command: npm run ci:bs
           when: always
@@ -151,7 +147,7 @@ workflows:
       - prepare
       - ruby-capybara:
           requires:
-            - nodejs-wdio
+            - prepare
       - nodejs-wdio:
           requires:
             - prepare
