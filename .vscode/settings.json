@@ -1,13 +1,21 @@
 {
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  },
-  "editor.formatOnSave": true,
+  // "editor.codeActionsOnSave": {
+  //   "source.fixAll.eslint": true
+  // },
+  // "editor.formatOnSave": true,
   "editor.formatOnType": false,
   "editor.insertSpaces": true,
   "editor.tabSize": 2,
   "files.eol": "\n",
+  "ruby.useBundler": true, //run non-lint commands with bundle exec
+  "ruby.useLanguageServer": true, // use the internal language server (see below)
   "ruby.lint": {
-    "ruby": true
-  }
+    "rubocop": {
+      "useBundler": true // enable rubocop via bundler
+    },
+    "reek": {
+      "useBundler": true // enable reek via bundler
+    } 
+  },
+  "ruby.format": "rubocop" // use rubocop for formattin
 }

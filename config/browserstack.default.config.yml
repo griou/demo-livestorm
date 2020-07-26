@@ -1,0 +1,17 @@
+server: "hub-cloud.browserstack.com"
+user: "username"
+key: "secret-hard-coded"
+
+common_caps:
+  "browserstack.debug": true
+  "name": "Bstack-[Capybara] Parallel Test"
+
+browser_caps:
+  - 
+    "browser": "chrome"
+    "os": "Windows"
+    "os_version": "10"
+  - 
+    "browser": "firefox"
+    "os": "Windows"
+    "os_version": "10"

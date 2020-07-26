@@ -1,0 +1,167 @@
+require 'rake'
+require 'rspec/core/rake_task'
+require 'parallel'
+require 'parallel_tests'
+
+SPEC_FOLDER = 'tests/specs'
+ALLURE_FOLDER = 'allure-results'
+
+def launch_in_parallel(number = 3)
+  system(
+    "parallel_rspec -n #{number} #{SPEC_FOLDER}"
+  )
+end
+
+def make_allure_report
+  system(
+    "allure generate -c #{ALLURE_FOLDER}"
+  )
+end
+
+def clean
+  system(
+    'rm -rf allure-*'
+  )
+end
+
+def open_allure_report
+  system(
+    'allure open'
+  )
+end
+
+desc 'allure report task'
+namespace :report do
+  desc 'Generate allure report and open it'
+  task :run do
+    Rake::Task['report:make'].invoke
+    Rake::Task['report:open'].invoke
+  end
+
+  desc 'Generate allure report'
+  task :make do
+    make_allure_report
+  end
+
+  desc 'Open report'
+  task :open do
+    open_allure_report
+  end
+
+  desc 'Delete allure report folders'
+  task :clean do
+    clean
+  end
+end
+
+task :report do
+  Rake::Task['report:run'].invoke
+end
+
+desc 'Run e2e tests'
+namespace :e2e do
+  desc 'Run tests with chromedriver'
+  task :chrome do |_task|
+    ENV['CONFIG_NAME'] = 'local'
+    ENV['BROWSER'] = 'chrome'
+    Rake::Task['report:clean'].invoke
+    launch_in_parallel
+    Rake::Task['report'].invoke
+  end
+
+  desc 'Run tests with remote selenium chrome'
+  task :firefox_remote do |_task|
+    ENV['CONFIG_NAME'] = 'remote'
+    ENV['BROWSER'] = 'chrome'
+    Rake::Task['report:clean'].invoke
+    launch_in_parallel
+    Rake::Task['report'].invoke
+  end
+
+  desc 'Run tests with geckdriver'
+  task :firefox do |_task|
+    ENV['CONFIG_NAME'] = 'local'
+    ENV['BROWSER'] = 'firefox'
+    Rake::Task['report:clean'].invoke
+    launch_in_parallel
+    Rake::Task['report'].invoke
+  end
+
+  desc 'Run tests with remote selenium firefox'
+  task :firefox_remote do |_task|
+    ENV['CONFIG_NAME'] = 'remote'
+    ENV['BROWSER'] = 'firefox'
+    Rake::Task['report:clean'].invoke
+    launch_in_parallel
+    Rake::Task['report'].invoke
+  end
+
+  desc 'Run tests with webdriver'
+  task :ci_chrome do |_task|
+    ENV['CONFIG_NAME'] = 'local'
+    ENV['BROWSER'] = 'chrome'
+    success = false
+    begin
+      launch_in_parallel
+      success = true
+    rescue => e
+      log(e)
+    end
+    Rake::Task['report:make'].invoke
+    raise unless success
+  end
+
+  desc 'Run tests with browserstack'
+  task :ci_bs do |_task|
+    ENV['CONFIG_NAME'] = 'browserstack'
+    ENV['TASK_ID'] = ENV['TASK_ID'] || '0'
+    success = false
+    begin
+      launch_in_parallel
+      success = true
+    rescue => e
+      log(e)
+    end
+    Rake::Task['report:make'].invoke
+    raise unless success
+  end
+
+  desc 'Run tests with Browserstack'
+  RSpec::Core::RakeTask.new(:browserstack) do |task|
+    ENV['TASK_ID'] = ENV['TASK_ID'] || '0'
+    ENV['CONFIG_NAME'] = 'browserstack'
+    task.pattern = Dir.glob(SPEC_FOLDER)
+  end
+
+  desc 'Run test in parallel with browser'
+  task :parallel_bs do |_task, _args|
+    Rake::Task['report:clean'].invoke
+    @num_parallel = 2
+    begin
+      results = Parallel.map([*1..@num_parallel], in_processes: @num_parallel) do |task_id|
+        ENV['TASK_ID'] = (task_id - 1).to_s
+        Rake::Task['e2e:browserstack'].invoke
+        Rake::Task['e2e:browserstack'].reenable
+        0
+      end
+      Rake::Task['report'].invoke
+      raise if results.any { |result| result != 0 }
+    rescue
+    end
+  end
+end
+
+desc 'Run tests with chromedriver'
+task :e2e do
+  Rake::Task['e2e:chrome'].invoke
+end
+
+desc 'Run tests with geckodriver'
+task :firefox do
+  Rake::Task['e2e:firefox'].invoke
+end
+
+desc 'Run tests with chromedriver'
+task :chrome do
+  Rake::Task['e2e:chrome'].invoke
+end

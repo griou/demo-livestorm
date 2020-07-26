@@ -10,6 +10,11 @@ aliases:
     working_directory: ~/repo/nodejs-wdio
     docker:
       - image: circleci/ruby:2-node-browsers
+  
+  - &ruby
+    working_directory: ~/repo/ruby-capybara
+    docker:
+      - image: circleci/ruby:2-node-browsers
 
 jobs:
   prepare:
@@ -25,10 +30,41 @@ jobs:
       - secrethub/install:
           version: 0.40.0
       - run: secrethub read griou/livestorm/users > fixtures/users.fixture.json
+      - run: secrethub read griou/livestorm/browserstack > config/browserstack.config.yml
       - persist_to_workspace:
           root: ~/repo
           paths:
             - .
+
+  bundle-install:
+    <<: *ruby
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - restore_cache:
+          keys:
+            - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            - gem-cache-v1-{{ arch }}-{{ .Branch }}
+            - gem-cache-v1
+      - run: bundle install
+      - run: npm install -D allure-commandline
+      - save_cache:
+          key: gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          paths:
+            - ~/repo/ruby-capybara
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - .
+
+  bundle-test:
+    <<: *ruby
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: bundle exec rake chrome
+      - store_artifacts:
+          path: ./allure-report/
 
   npm-install:
     <<: *nodejs
@@ -52,18 +88,8 @@ jobs:
           paths:
             - .
 
-  bundle-install:
-    <<: *defaults
-    steps:
-      - run:
-          name: Setup custom environment variables
-          command: |
-            CONTAINER_IMAGE="${REGISTRY_HOST}/li_web/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1}"
-            echo ${CONTAINER_IMAGE} > container-image
-
   npm-test:
     <<: *nodejs
-    working_directory: ~/repo/nodejs-wdio
     steps:
       - attach_workspace:
           at: ~/repo
@@ -115,14 +141,7 @@ jobs:
           path: ./allure-report/
       - store_artifacts:
           path: ./selenium-logs/
-
-  bundle-test:
-    <<: *defaults
-    steps:
-      - run:
-          name: Setup custom environment variables
-          command: |
-            echo "nothing"
+  
 orbs:
   secrethub: secrethub/cli@1.0.1
 
@@ -134,12 +153,12 @@ workflows:
       - npm-install:
           requires:
             - prepare
-      # - bundle-install:
-      #     requires:
-      #       - prepare
+      - bundle-install:
+          requires:
+            - prepare
+      - bundle-install:
+          requires:
+            - prepare
       - npm-test:
           requires:
-            - npm-install
-      # - bundle-test:
-      #     requires:
-      #       - npm-test
+            - bundle-test

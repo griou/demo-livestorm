@@ -1,5 +1,6 @@
 **/node_modules
-**/allure-results
-**/allure-report
+**/allure-*
 **/users.fixture.json
-selenoid/
+selenoid/logs
+selenoid/video
+**/browserstack.config.yml
