@@ -62,7 +62,10 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: bundle exec rake e2e:ci_chrome
+      - run: pwd
+      - run: gem list
+      - run: rake e2e:ci_chrome
+      - run: rake e2e:ci_browserstack
       - store_artifacts:
           path: ./allure-report/
 
@@ -97,6 +100,7 @@ jobs:
           name: Start Selenium
           command: java -jar ../selenium-server-standalone-3.5.3.jar -log ../selenium-logs/selenium-node.log
           background: true
+          when: always
       - run:
           name: run desktop test
           command: npm run ci:desktop
