@@ -54,7 +54,7 @@ jobs:
           when: always
       - run: 
           name: Test with browserstack
-          command: rake e2e:ci_browserstack
+          command: rake e2e:ci_bs
           when: always
       - store_artifacts:
           path: ./allure-report/
