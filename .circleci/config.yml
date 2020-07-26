@@ -151,4 +151,4 @@ workflows:
             - prepare
       - nodejs-wdio:
           requires:
-            - nodejs-wdio
+            - ruby-capybara
