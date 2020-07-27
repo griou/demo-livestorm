@@ -29,8 +29,12 @@ jobs:
       - run: mkdir -p ./selenium-logs/
       - secrethub/install:
           version: 0.40.0
-      - run: secrethub read griou/livestorm/users > fixtures/users.fixture.json
-      - run: secrethub read griou/livestorm/browserstack > config/browserstack.config.yml
+      - run: npm install -g allure-commandline
+      - run:
+          name: retrieve secrets
+          command: |
+            secrethub read griou/livestorm/users > fixtures/users.fixture.json
+            secrethub read griou/livestorm/browserstack > config/browserstack.config.yml
       - persist_to_workspace:
           root: ~/repo
           paths:
@@ -47,7 +51,7 @@ jobs:
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
       - run: bundle install
-      - run: npm install -D allure-commandline
+
       - run:
           name: Test with chromedriver
           command: rake e2e:ci_chrome
@@ -93,7 +97,7 @@ jobs:
           background: true
           when: always
       - run:
-          name: run desktop test
+          name: run desktop test with local selenium grid
           command: npm run ci:desktop
           when: always
       # - run:
