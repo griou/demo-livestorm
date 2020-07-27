@@ -1,3 +1,4 @@
+require 'yaml'
 require 'rake'
 require 'rspec/core/rake_task'
 require 'parallel'
@@ -104,13 +105,13 @@ namespace :e2e do
     begin
       success = launch_in_parallel(1)
     rescue => e
-      log(e)
+      puts e
     end
     Rake::Task['report:make'].invoke
     raise unless success
   end
 
-  desc 'Run tests with browserstack'
+  desc 'Run tests in parallel with browserstack'
   task :ci_bs do |_task|
     ENV['CONFIG_NAME'] = 'browserstack'
     success = false
@@ -123,7 +124,9 @@ namespace :e2e do
         0
       end
       success = true if results.all { |result| result == 0 }
-    rescue
+    rescue => e
+      puts e
+    end
     Rake::Task['report:make'].invoke
     raise unless success
   end
@@ -133,11 +136,11 @@ namespace :e2e do
     ENV['TASK_ID'] = ENV['TASK_ID'] || '0'
     ENV['CONFIG_NAME'] = 'browserstack'
     config = YAML.safe_load(File.read(File.join(Dir.pwd, '../config/browserstack.config.yml')))
-    ENV['BROWSER'] = config['browser_caps'][TASK_ID]['browser']
+    ENV['BROWSER'] = config['browser_caps'][ENV['TASK_ID'].to_i]['browser']
     task.pattern = Dir.glob(SPEC_FOLDER)
   end
 
-  desc 'Run test in parallel with browser'
+  desc 'Run test in parallel with Browserstack'
   task :parallel_bs do |_task, _args|
     Rake::Task['report:clean'].invoke
     @num_parallel = 2
@@ -150,7 +153,8 @@ namespace :e2e do
       end
       Rake::Task['report'].invoke
       raise if results.any { |result| result != 0 }
-    rescue
+    rescue => e
+      puts e
     end
   end
 end
