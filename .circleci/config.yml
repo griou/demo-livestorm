@@ -53,8 +53,7 @@ jobs:
           command: rake e2e:ci_chrome
           when: always
       - run: ls -al ./
-      - run: ls -al ./junit-report/
-      - run: ls -al ./allure-results/
+      - run: allure generate -c allure-results
       - run: ls -al ./allure-report/
       # - run:
       #     name: Test with browserstack
