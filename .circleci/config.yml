@@ -29,7 +29,6 @@ jobs:
       - run: mkdir -p ./selenium-logs/
       - secrethub/install:
           version: 0.40.0
-      - run: sudo npm install -g allure-commandline
       - run:
           name: retrieve secrets
           command: |
@@ -51,7 +50,9 @@ jobs:
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
       - run: bundle install
-
+      - run:
+          name: Install allure command line
+          command: sudo npm install -g allure-commandline
       - run:
           name: Test with chromedriver
           command: rake e2e:ci_chrome
