@@ -1,3 +1,5 @@
 --format progress
 --format documentation --color
---format RspecJunitFormatter --out junit-report/report-<%= ENV['BROWSER'] %><%= ENV["TEST_ENV_NUMBER"] || 0 %>.xml
+--format RspecJunitFormatter
+--out junit-report/report-<%= ENV["BROWSER"] %><%= ENV["TEST_ENV_NUMBER"] || 0 %>.xml
+    

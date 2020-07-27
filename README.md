@@ -149,7 +149,7 @@ Liste des secrets :
    - Reporting junit : [OK](https://app.circleci.com/pipelines/github/griou/demo-livestorm/43/workflows/ed05443a-81de-4209-af6d-e0aa41a7df60/jobs/103/tests)
    - Reporting Allure : [OK](https://app.circleci.com/pipelines/github/griou/demo-livestorm/43/workflows/ed05443a-81de-4209-af6d-e0aa41a7df60/jobs/103/tests)
 2. Exécution avec browserstack
-   - Reporting Allure : [OK](https://app.circleci.com/pipelines/github/griou/demo-livestorm/44/workflows/5e533997-5399-46ff-a51f-983da5378dcf/jobs/105/tests)
+   - Reporting Allure : [OK](https://app.circleci.com/pipelines/github/griou/demo-livestorm/44/workflows/5e533997-5399-46ff-a51f-983da5378dcf/jobs/105/tests). **Note** : le tesk KO est lié à l'exécution précédente avec le selenium en local, le report allure permet d'avoir tous les résultats des tests dans un seul report.)
 
 ## :whale: Serveur Selenium en local
 
