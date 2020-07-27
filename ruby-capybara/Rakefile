@@ -8,6 +8,7 @@ SPEC_FOLDER = 'tests/specs'
 ALLURE_FOLDER = 'allure-results'
 
 def launch_in_parallel(number = 3)
+  puts "PARALLEL number: " + number
   return system(
     'parallel_rspec -n ' + number.to_s + ' ' +
      SPEC_FOLDER
@@ -98,7 +99,7 @@ namespace :e2e do
     Rake::Task['report'].invoke
   end
 
-  desc 'Run tests with webdriver'
+  desc 'Run tests with chromedriver'
   task :ci_chrome do |_task|
     ENV['CONFIG_NAME'] = 'local'
     ENV['BROWSER'] = 'chrome'
@@ -109,6 +110,7 @@ namespace :e2e do
       puts e
     end
     Rake::Task['report:make'].invoke
+    puts "success : " + success.to_s
     exit success ? 0 : 1
   end
 
