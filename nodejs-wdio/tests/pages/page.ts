@@ -9,7 +9,9 @@ class Page {
   }
 
   public waitForDisplayed(): void {
-    browser.waitUntil(() => this.isDisplayed());
+    browser.waitUntil(() => this.isDisplayed(), {
+      timeoutMsg: `Page ${this.constructor.name} was not visible`,
+    });
   }
 
   public visit(path: string): void {
