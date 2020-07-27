@@ -57,9 +57,6 @@ jobs:
           name: Test with chromedriver
           command: rake e2e:ci_chrome
           when: always
-      - run: ls -al ./
-      - run: allure generate -c allure-results
-      - run: ls -al ./allure-report/
       # - run:
       #     name: Test with browserstack
       #     command: rake e2e:ci_bs

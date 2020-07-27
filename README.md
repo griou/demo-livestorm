@@ -43,9 +43,11 @@ Liste des tests d'acceptation UI (Rspec et Mocha) :
 > 1. Les tests décrivent le comportement du système, c'est à dire ce qu'il fait (et non comment) et chaque test vérifie une seule intension à la fois.
 > 1. C'est à un niveau unitaire qu'il faut être exhaustif sur le domaine/la fonctionnalité. Au niveau e2e, il est recommandé de couvrir les cas les plus importants (happy path) de manière à limiter les coûts, la maintenance et à avoir une boucle de feedback rapide.
 > 1. Dans un contexte projet avec les méthodologies agiles, pour rédiger ces exemples il est souhaitable de collaborer au travers du célèbre "three amigos" avec dev/qa/po pour avoir les exemples avant de démarrer l'implémentation (aka. BDD/ATDD/TDD).
+> 1. Les tests utilisent le design pattern page object model.
 >
 > **Références** :
 >
+> - [PageObject](https://martinfowler.com/bliki/PageObject.html)
 > - [Creating Fast, Reliable, Focused UI Automation With Atomic Tests](https://medium.com/swlh/creating-fast-reliable-focused-ui-automation-with-atomic-tests-582e4318c0bb)
 > - [The world's most misunderstood collaboration tool](https://cucumber.io/blog/collaboration/the-worlds-most-misunderstood-collaboration-tool/)
 > - [Introducing Example Mapping](https://cucumber.io/blog/bdd/example-mapping-introduction/)
@@ -138,11 +140,8 @@ Liste des secrets :
 #### :hamster: Capybara
 
 1. Exécution des tests avec webdriver dans un container docker :
-   - Reporting junit : [OK]() / [KO]()
-   - Reporting Allure : [OK]() / [KO]()
-2. Exécution des tests avec browserstack :
-   - Reporting junit : [OK]() / [KO]()
-   - Reporting Allure : [OK]() / [KO]()
+   - Reporting junit : [OK]() / [KO](https://app.circleci.com/pipelines/github/griou/demo-livestorm/57/workflows/9361b2e7-19df-4a63-8459-91b30989749f/jobs/141/tests)
+   - Reporting Allure : [OK]() / [KO](https://141-281498399-gh.circle-artifacts.com/0/allure-report/index.html)
 
 #### :robot: WebdriverIo
 
