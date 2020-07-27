@@ -10,6 +10,7 @@ CONFIG_NAME = ENV['CONFIG_NAME'] || 'local'
 RSpec.configure do |c|
   include Capybara::DSL
   c.formatter = AllureRspecFormatter
+  Capybara.default_max_wait_time = 15
 
   c.before do |_example|
     Capybara.run_server = false
@@ -39,7 +40,6 @@ RSpec.configure do |c|
         )
       end
       Capybara.default_driver = :remote_browser
-      Capybara.javascript_driver = :remote_browser
 
     when 'browserstack'
       CONFIG = YAML.safe_load(File.read(File.join(Dir.pwd, '../config/browserstack.config.yml')))
@@ -49,12 +49,6 @@ RSpec.configure do |c|
       Capybara.register_driver :browserstack do |app|
         @caps = CONFIG['common_caps'].merge(CONFIG['browser_caps'][TASK_ID])
 
-        # Code to start browserstack local before start of test
-        if @caps['browserstack.local'] && @caps['browserstack.local'].to_s == 'true';
-          @bs_local = BrowserStack::Local.new
-          bs_local_args = {"key" => "#{CONFIG['key']}"}
-          @bs_local.start(bs_local_args)
-        end
         Capybara::Selenium::Driver.new(app,
           browser: :remote,
           url: "https://#{CONFIG['user']}:#{CONFIG['key']}@#{CONFIG['server']}/wd/hub",

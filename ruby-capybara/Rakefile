@@ -7,25 +7,25 @@ SPEC_FOLDER = 'tests/specs'
 ALLURE_FOLDER = 'allure-results'
 
 def launch_in_parallel(number = 3)
-  system(
+  return system(
     "parallel_rspec -n #{number} #{SPEC_FOLDER}"
   )
 end
 
 def make_allure_report
-  system(
+  return system(
     "allure generate -c #{ALLURE_FOLDER}"
   )
 end
 
 def clean
-  system(
+  return system(
     'rm -rf allure-*'
   )
 end
 
 def open_allure_report
-  system(
+  return system(
     'allure open'
   )
 end
@@ -70,7 +70,7 @@ namespace :e2e do
   end
 
   desc 'Run tests with remote selenium chrome'
-  task :firefox_remote do |_task|
+  task :chrome_remote do |_task|
     ENV['CONFIG_NAME'] = 'remote'
     ENV['BROWSER'] = 'chrome'
     Rake::Task['report:clean'].invoke
@@ -102,8 +102,7 @@ namespace :e2e do
     ENV['BROWSER'] = 'chrome'
     success = false
     begin
-      launch_in_parallel
-      success = true
+      success = launch_in_parallel(1)
     rescue => e
       log(e)
     end
@@ -114,14 +113,17 @@ namespace :e2e do
   desc 'Run tests with browserstack'
   task :ci_bs do |_task|
     ENV['CONFIG_NAME'] = 'browserstack'
-    ENV['TASK_ID'] = ENV['TASK_ID'] || '0'
     success = false
+    @num_parallel = 1
     begin
-      launch_in_parallel
-      success = true
-    rescue => e
-      log(e)
-    end
+      results = Parallel.map([*1..@num_parallel], in_processes: @num_parallel) do |task_id|
+        ENV['TASK_ID'] = (task_id - 1).to_s
+        Rake::Task['e2e:browserstack'].invoke
+        Rake::Task['e2e:browserstack'].reenable
+        0
+      end
+      success = true if results.all { |result| result == 0 }
+    rescue
     Rake::Task['report:make'].invoke
     raise unless success
   end
@@ -130,6 +132,8 @@ namespace :e2e do
   RSpec::Core::RakeTask.new(:browserstack) do |task|
     ENV['TASK_ID'] = ENV['TASK_ID'] || '0'
     ENV['CONFIG_NAME'] = 'browserstack'
+    config = YAML.safe_load(File.read(File.join(Dir.pwd, '../config/browserstack.config.yml')))
+    ENV['BROWSER'] = config['browser_caps'][TASK_ID]['browser']
     task.pattern = Dir.glob(SPEC_FOLDER)
   end
 

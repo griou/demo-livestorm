@@ -10,7 +10,7 @@ aliases:
     working_directory: ~/repo/nodejs-wdio
     docker:
       - image: circleci/ruby:2-node-browsers
-  
+
   - &ruby
     working_directory: ~/repo/ruby-capybara
     docker:
@@ -52,12 +52,16 @@ jobs:
           name: Test with chromedriver
           command: rake e2e:ci_chrome
           when: always
-      - run: 
-          name: Test with browserstack
-          command: rake e2e:ci_bs
-          when: always
+      - store_test_results:
+          path: ./junit-report/
+      - store_artifacts:
+          path: ./junit-report/
       - store_artifacts:
           path: ./allure-report/
+      # - run:
+      #     name: Test with browserstack
+      #     command: rake e2e:ci_bs
+      #     when: always
       - save_cache:
           key: gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
           paths:
@@ -65,7 +69,7 @@ jobs:
       - persist_to_workspace:
           root: ~/repo
           paths:
-            - .     
+            - .
 
   nodejs-wdio:
     <<: *nodejs
@@ -89,10 +93,10 @@ jobs:
           name: run desktop test
           command: npm run ci:desktop
           when: always
-      - run:
-          name: run test with browserstack
-          command: npm run ci:bs
-          when: always
+      # - run:
+      #     name: run test with browserstack
+      #     command: npm run ci:bs
+      #     when: always
       - run:
           name: Make history dir for allure
           command: mkdir allure-results/history
@@ -136,7 +140,7 @@ jobs:
           root: ~/repo
           paths:
             - .
-  
+
 orbs:
   secrethub: secrethub/cli@1.0.1
 
