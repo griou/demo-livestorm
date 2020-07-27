@@ -52,12 +52,10 @@ jobs:
           name: Test with chromedriver
           command: rake e2e:ci_chrome
           when: always
-      - store_test_results:
-          path: ./junit-report/
-      - store_artifacts:
-          path: ./junit-report/
-      - store_artifacts:
-          path: ./allure-report/
+      - run: ls -al ./
+      - run: ls -al ./junit-report/
+      - run: ls -al ./allure-results/
+      - run: ls -al ./allure-report/
       # - run:
       #     name: Test with browserstack
       #     command: rake e2e:ci_bs
@@ -70,6 +68,12 @@ jobs:
           root: ~/repo
           paths:
             - .
+      - store_test_results:
+          path: ./junit-report/
+      - store_artifacts:
+          path: ./junit-report/
+      - store_artifacts:
+          path: ./allure-report/
 
   nodejs-wdio:
     <<: *nodejs
