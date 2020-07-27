@@ -9,7 +9,7 @@ ALLURE_FOLDER = 'allure-results'
 
 def launch_in_parallel(number = 3)
   return system(
-    "parallel_rspec -n #{number} #{SPEC_FOLDER}"
+    "parallel_rspec -n #{number.to_s} #{SPEC_FOLDER}"
   )
 end
 
@@ -108,7 +108,7 @@ namespace :e2e do
       puts e
     end
     Rake::Task['report:make'].invoke
-    raise unless success
+    exit success.to_i
   end
 
   desc 'Run tests in parallel with browserstack'
@@ -128,7 +128,7 @@ namespace :e2e do
       puts e
     end
     Rake::Task['report:make'].invoke
-    raise unless success
+    exit success.to_i
   end
 
   desc 'Run tests with Browserstack'
