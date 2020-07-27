@@ -22,7 +22,7 @@ exports.config.reporters.push([
   },
 ]);
 
-exports.config.services.push(['browserstack', { browserstackLocal: true }]);
+exports.config.services.push(['browserstack', { browserstackLocal: false }]);
 
 exports.config.capabilities = [
   {
