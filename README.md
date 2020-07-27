@@ -102,7 +102,7 @@ $ rake e2e:chrome_remote
 $ rake e2e:parallel_bs
 ```
 
-> **Note** : le rapport allure est généré et ouvert automatiquement lors de l'utilisation d'une tâche rake.
+> **Note** : le rapport allure est généré et ouvert automatiquement lors de l'utilisation d'une tâche rake (pour la Ci il est uniquement généré).
 
 ### :robot: NodeJS / WebdriverIo
 
@@ -140,8 +140,8 @@ Liste des secrets :
 #### :hamster: Capybara
 
 1. Exécution des tests avec webdriver dans un container docker :
-   - Reporting junit : [OK]() / [KO](https://app.circleci.com/pipelines/github/griou/demo-livestorm/57/workflows/9361b2e7-19df-4a63-8459-91b30989749f/jobs/141/tests)
-   - Reporting Allure : [OK]() / [KO](https://141-281498399-gh.circle-artifacts.com/0/allure-report/index.html)
+   - Reporting junit : [OK](https://app.circleci.com/pipelines/github/griou/demo-livestorm/61/workflows/04714630-7759-43c0-842a-ffc191a6e62c/jobs/155/tests) / [KO](https://app.circleci.com/pipelines/github/griou/demo-livestorm/57/workflows/9361b2e7-19df-4a63-8459-91b30989749f/jobs/141/tests)
+   - Reporting Allure : [OK](https://155-281498399-gh.circle-artifacts.com/0/allure-report/index.html) / [KO](https://141-281498399-gh.circle-artifacts.com/0/allure-report/index.html)
 
 #### :robot: WebdriverIo
 
@@ -149,7 +149,7 @@ Liste des secrets :
    - Reporting junit : [OK](https://app.circleci.com/pipelines/github/griou/demo-livestorm/43/workflows/ed05443a-81de-4209-af6d-e0aa41a7df60/jobs/103/tests)
    - Reporting Allure : [OK](https://app.circleci.com/pipelines/github/griou/demo-livestorm/43/workflows/ed05443a-81de-4209-af6d-e0aa41a7df60/jobs/103/tests)
 2. Exécution avec browserstack
-   - Reporting Allure : [OK](https://app.circleci.com/pipelines/github/griou/demo-livestorm/44/workflows/5e533997-5399-46ff-a51f-983da5378dcf/jobs/105/tests). **Note** : le tesk KO est lié à l'exécution précédente avec le selenium en local, le report allure permet d'avoir tous les résultats des tests dans un seul report.)
+   - Reporting Allure : [OK](https://105-281498399-gh.circle-artifacts.com/0/allure-report/index.html). **Note** : le tesk KO est lié à l'exécution précédente avec le selenium en local, le report allure permet d'avoir tous les résultats des tests dans un seul report.
 
 ## :whale: Serveur Selenium en local
 
