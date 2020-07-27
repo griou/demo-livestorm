@@ -25,7 +25,6 @@ describe 'Sign Out Success', :shallow do
 
   it 'should redirect to sign in page' do
     @webinars.sign_out
-    @sign_in.wait_for_displayed
     expect { @sign_in.wait_for_displayed }
       .not_to raise_error, 'sign in page should be displayed'
   end
