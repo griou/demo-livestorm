@@ -4,7 +4,7 @@ aliases:
   - &defaults
     working_directory: ~/repo
     docker:
-      - image: circleci/ruby:2-node-browsers
+      - image: cim/ruby:2.7.1-node-browsers
 
   - &nodejs
     working_directory: ~/repo/nodejs-wdio
