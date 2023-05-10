@@ -29,11 +29,11 @@ jobs:
       - run: mkdir -p ./selenium-logs/
       - secrethub/install:
           version: 0.40.0
-      - run:
-          name: retrieve secrets
-          command: |
-            secrethub read griou/livestorm/users > fixtures/users.fixture.json
-            secrethub read griou/livestorm/browserstack > config/browserstack.config.yml
+      # - run:
+      #     name: retrieve secrets
+      #     command: |
+      #       secrethub read griou/livestorm/users > fixtures/users.fixture.json
+      #       secrethub read griou/livestorm/browserstack > config/browserstack.config.yml
       - persist_to_workspace:
           root: ~/repo
           paths:
